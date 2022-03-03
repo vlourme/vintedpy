@@ -57,7 +57,7 @@ def generate_embed(item: Any) -> hikari.Embed:
     embed.add_field('Size', item['size_title'], inline=True)
 
     date = datetime.utcfromtimestamp(
-        int(item['photo']['high_resolution']['timestamp'])).strftime('%d-%m-%Y')
+        int(item['photo']['high_resolution']['timestamp'])).strftime('%d/%m/%Y, %H:%M:%S')
     embed.set_footer('Published on ' + date)
     embed.set_author(name='Posted by ' + item['user']['login'],
                      url=item['user']['profile_url'])
