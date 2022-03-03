@@ -52,13 +52,13 @@ async def ready_listener(_):
 @lightbulb.command('subscribe', 'Subscribe to a Vinted search')
 @lightbulb.implements(lightbulb.SlashCommand)
 async def subscribe(ctx: lightbulb.Context) -> None:
-    sub = table.insert({
+    table.insert({
         'url': ctx.options.url,
         'channel_id': ctx.options.channel.id,
         'synced': False,
         'last_sync': int(time())
     })
-    await ctx.respond('✅ Created subscription #' + str(sub['id']))
+    await ctx.respond('✅ Created subscription')
 
 
 @bot.command()
