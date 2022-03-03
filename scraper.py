@@ -65,7 +65,7 @@ def generate_embed(item: Any) -> hikari.Embed:
     return embed
 
 
-def generate_row(bot: BotApp, item: Any) -> Any:
+def generate_row(bot: BotApp, item: Any, link: str) -> Any:
     """
     Generate a component row with a button
     to redirect user on Vinted
@@ -73,6 +73,7 @@ def generate_row(bot: BotApp, item: Any) -> Any:
     Args:
         bot (BotApp): Bot instance
         item (Any): Item
+        link (str): Original search link
 
     Returns:
         Any: Generated row
@@ -80,7 +81,13 @@ def generate_row(bot: BotApp, item: Any) -> Any:
     row = bot.rest.build_action_row()
     (
         row.add_button(hikari.ButtonStyle.LINK, item['url'])
-        .set_label('Open in Vinted')
+        .set_label('View article')
+        .set_emoji('🛍')
+        .add_to_container()
+    )
+    (
+        row.add_button(hikari.ButtonStyle.LINK, link)
+        .set_label('Search list')
         .set_emoji('🔍')
         .add_to_container()
     )

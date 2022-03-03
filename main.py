@@ -22,7 +22,7 @@ async def run_background() -> None:
             print(f'Found {len(items)} items for #' + str(sub['id']))
             for item in items:
                 embed = generate_embed(item)
-                row = generate_row(bot, item)
+                row = generate_row(bot, item, sub['url'])
 
                 await bot.rest.create_message(sub['channel_id'], embed=embed, components=[row])
 
@@ -92,4 +92,7 @@ if __name__ == "__main__":
 
         uvloop.install()
 
-bot.run(activity=hikari.Activity(name='Scraping SB Dunks!'))
+bot.run(activity=hikari.Activity(
+    name='Vinted articles!',
+    type=hikari.ActivityType.WATCHING,
+    url='https://github.com/vlourme/vintedpy'))
