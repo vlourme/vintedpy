@@ -38,12 +38,13 @@ def scrape(params: Dict[str, str]) -> List:
     return items
 
 
-def generate_embed(item: Any) -> hikari.Embed:
+def generate_embed(item: Any, sub_id: int) -> hikari.Embed:
     """
     Generate an embed with item details
 
     Args:
         item (Any): Scraped item
+        sub_id (int): Subscription ID
 
     Returns:
         hikari.Embed: Generated embed
@@ -58,7 +59,7 @@ def generate_embed(item: Any) -> hikari.Embed:
 
     date = datetime.utcfromtimestamp(
         int(item['photo']['high_resolution']['timestamp'])).strftime('%d/%m/%Y, %H:%M:%S')
-    embed.set_footer('Published on ' + date)
+    embed.set_footer(f'Published on {date} • Subscription #{str(sub_id)}')
     embed.set_author(name='Posted by ' + item['user']['login'],
                      url=item['user']['profile_url'])
 

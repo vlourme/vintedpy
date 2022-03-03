@@ -21,7 +21,7 @@ async def run_background() -> None:
             items = scrape(sub)
             print(f'Found {len(items)} items for #' + str(sub['id']))
             for item in items:
-                embed = generate_embed(item)
+                embed = generate_embed(item, sub['id'])
                 row = generate_row(bot, item, sub['url'])
 
                 await bot.rest.create_message(sub['channel_id'], embed=embed, components=[row])
