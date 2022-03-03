@@ -1,9 +1,12 @@
-from typing import Any, Dict
 from urllib.parse import parse_qs, urlencode, urlsplit
+from typing import Any, Dict
 import requests
 from tenacity import retry
 
 missing_ids = ['catalog', 'status']
+user_agent = 'vinted-ios Vinted/22.6.1 (lt.manodrabuziai.fr; build:21794; iOS 15.2.0) iPhone10,6'
+device_model = 'iPhone10,6'
+app_version = '22.6.1'
 
 
 @retry
@@ -17,7 +20,15 @@ def get_cookie() -> str:
     Returns:
         str: cookie
     """
-    response = requests.get('https://vinted.fr')
+    response = requests.get(
+        url='https://vinted.fr',
+        headers={
+            'User-Agent': user_agent,
+            'x-app-version': app_version,
+            'x-device-model': device_model,
+            'short-bundle-version': app_version
+        }
+    )
     cookie = response.cookies.get('_vinted_fr_session')
 
     if not cookie:
@@ -59,7 +70,7 @@ def parse_url(url: str) -> Dict[str, str]:
 
 
 @retry
-def search(url: str, query: Dict[str, str]) -> Any:
+def search(url: str, query: Dict[str, str] = {}) -> Any:
     """
     Search items from the Vinted API
     using a web URL.
@@ -79,7 +90,12 @@ def search(url: str, query: Dict[str, str]) -> Any:
     response = requests.get(
         url='https://www.vinted.fr/api/v2/catalog/items?' + urlencode(query),
         headers={
-            'Cookie': '_vinted_fr_session=' + session
+            'Cookie': '_vinted_fr_session=' + session,
+            'User-Agent': user_agent,
+            'x-app-version': app_version,
+            'x-device-model': device_model,
+            'short-bundle-version': app_version,
+            'Accept': 'application/json'
         }
     )
 
