@@ -42,6 +42,9 @@ And also set the following bot permission:
 - Read Messages/View Channels
 - Use Slash Commands
 
+### Create directory for database
+A `data` folder is needed: `mkdir data`
+
 ### Standalone installation
 You must have `python3` and `pip3` installed, Python >3.8 is recommended.
 
