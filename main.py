@@ -47,8 +47,8 @@ async def ready_listener(_):
 
 @bot.command()
 @lightbulb.add_checks(lightbulb.owner_only)
-@lightbulb.option('url', 'URL to vinted search')
-@lightbulb.option('channel', 'Channel to receive alerts', hikari.TextableChannel)
+@lightbulb.option('url', 'URL to vinted search', type=str, required=True)
+@lightbulb.option('channel', 'Channel to receive alerts', type=hikari.TextableChannel, required=True)
 @lightbulb.command('subscribe', 'Subscribe to a Vinted search')
 @lightbulb.implements(lightbulb.SlashCommand)
 async def subscribe(ctx: lightbulb.Context) -> None:
@@ -79,12 +79,12 @@ async def subscriptions(ctx: lightbulb.Context) -> None:
 
 @bot.command()
 @lightbulb.add_checks(lightbulb.owner_only)
-@lightbulb.option('id', 'ID of the subscription')
+@lightbulb.option('id', 'ID of the subscription', type=int, required=True)
 @lightbulb.command('unsubscribe', 'Stop following a subscription')
 @lightbulb.implements(lightbulb.SlashCommand)
 async def unsubscribe(ctx: lightbulb.Context) -> None:
     table.delete(id=ctx.options.id)
-    await ctx.respond(f'🗑 Deleted subscription #{ctx.options.id}.')
+    await ctx.respond(f'🗑 Deleted subscription #{str(ctx.options.id)}.')
 
 if __name__ == "__main__":
     if os.name != "nt":
