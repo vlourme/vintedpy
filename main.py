@@ -58,7 +58,7 @@ async def subscribe(ctx: lightbulb.Context) -> None:
         'synced': False,
         'last_sync': int(time())
     })
-    await ctx.respond('✅ Created subscription #' + int(sub['id']))
+    await ctx.respond('✅ Created subscription #' + str(sub['id']))
 
 
 @bot.command()
