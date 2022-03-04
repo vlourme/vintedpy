@@ -50,18 +50,19 @@ def generate_embed(item: Any, sub_id: int) -> hikari.Embed:
         hikari.Embed: Generated embed
     """
     embed = hikari.Embed()
-    embed.title = item['title']
-    embed.url = item['url']
-    embed.set_image(item['photo']['url'])
+    embed.title = item['title'] or "Unknown"
+    embed.url = item['url'] or "Unknown"
+    embed.set_image(item['photo']['url'] or "Unknown")
     embed.color = hikari.Color(0x09b1ba)
-    embed.add_field('Price', item['price'] + ' €', inline=True)
-    embed.add_field('Size', item['size_title'], inline=True)
+    embed.add_field('Price', str(item['price']) or "-1" + ' €', inline=True)
+    embed.add_field('Size', item['size_title'] or "-1", inline=True)
 
     date = datetime.utcfromtimestamp(
         int(item['photo']['high_resolution']['timestamp'])).strftime('%d/%m/%Y, %H:%M:%S')
-    embed.set_footer(f'Published on {date} • Subscription #{str(sub_id)}')
-    embed.set_author(name='Posted by ' + item['user']['login'],
-                     url=item['user']['profile_url'])
+    embed.set_footer(
+        f'Published on {date or "unknown"} • Subscription #{str(sub_id)}')
+    embed.set_author(name='Posted by ' + item['user']['login'] or "unknown",
+                     url=item['user']['profile_url'] or "unknown")
 
     return embed
 
@@ -80,18 +81,22 @@ def generate_row(bot: BotApp, item: Any, link: str) -> Any:
         Any: Generated row
     """
     row = bot.rest.build_action_row()
-    (
-        row.add_button(hikari.ButtonStyle.LINK, item['url'])
-        .set_label('View article')
-        .set_emoji('🛍')
-        .add_to_container()
-    )
+
+    if item['url']:
+        (
+            row.add_button(hikari.ButtonStyle.LINK, item['url'])
+            .set_label('View article')
+            .set_emoji('🛍')
+            .add_to_container()
+        )
+
     (
         row.add_button(hikari.ButtonStyle.LINK, link)
         .set_label('Search list')
         .set_emoji('🔍')
         .add_to_container()
     )
+
     (
         row.add_button(
             hikari.ButtonStyle.LINK,
