@@ -95,11 +95,10 @@ def generate_row(bot: BotApp, item: Any, link: str) -> Any:
     (
         row.add_button(
             hikari.ButtonStyle.LINK,
-            'https://www.vinted.fr/transaction/buy/new?source_screen=item&transaction%5Bitem_id%5D=' +
-            str(item['id'])
+            'vintedfr://item?id='.format(str(item['id']))
         )
-        .set_label('Buy')
-        .set_emoji('💵')
+        .set_label('Open in App')
+        .set_emoji('📱')
         .add_to_container()
     )
 
