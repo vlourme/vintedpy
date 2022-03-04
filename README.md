@@ -42,8 +42,13 @@ And also set the following bot permission:
 - Read Messages/View Channels
 - Use Slash Commands
 
-### Create directory for database
-A `data` folder is needed: `mkdir data`
+### Database setup
+The program uses SQLite to store subscriptions and synced items.
+Once the first launch, it will create the database automatically, however, you'll need to create a **data directory**
+in the project root.
+In order to do this, you can just use your graphical interface to make a directory or run `mkdir data` in your terminal.
+
+*Note:* You may want to use a external database such as MySQL or PostgreSQL, for this, you can specify the database credentials in the beginning of the `main.py` file. This can be useful if you want to run replicas of the bot like on Kubernetes.
 
 ### Standalone installation
 You must have `python3` and `pip3` installed, Python >3.8 is recommended.
@@ -51,7 +56,9 @@ You must have `python3` and `pip3` installed, Python >3.8 is recommended.
 1. Install dependencies: `pip3 install -r requirements.txt`
 2. Start the bot: `python3 main.py`
 
-*Note:* The bot will run on main thread, if the connection to the server closes, the bot will end. You can use `screen` or `jobs` to handle this.
+If you want to stop the bot, you can just press **CTRL+C** once. Don't spam **CTRL+C**, it may take a few seconds before it completely stop because of the background thread used to sync items.
+
+*Note:* The bot will run on main thread, if the connection to the server closes, the bot will end. You can use `screen` or `jobs` to handle this. 
 
 ### Docker installation
 You must have docker installed.
