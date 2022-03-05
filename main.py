@@ -5,6 +5,7 @@ import dataset
 import dotenv
 import hikari
 import lightbulb
+from loguru import logger as log
 
 from scraper import generate_embed, generate_row, scrape
 
@@ -16,10 +17,13 @@ table = db['subscriptions']
 
 
 async def run_background() -> None:
+    log.info("Scraper started.")
+
     while True:
         for sub in table:
             items = scrape(sub)
-            print(f'Found {len(items)} items for #' + str(sub['id']))
+            log.debug("{items} found for {id}",
+                      items=len(items), id=str(sub['id']))
             for item in items:
                 embed = generate_embed(item, sub['id'])
                 row = generate_row(bot, item, sub['url'])
@@ -41,7 +45,7 @@ async def run_background() -> None:
 
 @bot.listen(hikari.ShardReadyEvent)
 async def ready_listener(_):
-    print("The bot is ready!")
+    log.info("Bot is ready")
     asyncio.create_task(run_background())
 
 
@@ -58,6 +62,7 @@ async def subscribe(ctx: lightbulb.Context) -> None:
         'synced': False,
         'last_sync': int(time())
     })
+    log.info("Subscription created for {url}", url=ctx.options.url)
     await ctx.respond('✅ Created subscription')
 
 
@@ -84,6 +89,7 @@ async def subscriptions(ctx: lightbulb.Context) -> None:
 @lightbulb.implements(lightbulb.SlashCommand)
 async def unsubscribe(ctx: lightbulb.Context) -> None:
     table.delete(id=ctx.options.id)
+    log.info("Deleted subscription #{id}", id=str(ctx.options.id))
     await ctx.respond(f'🗑 Deleted subscription #{str(ctx.options.id)}.')
 
 if __name__ == "__main__":
