@@ -21,7 +21,7 @@ async def run_background() -> None:
 
     while True:
         for sub in table:
-            items = scrape(sub)
+            items = scrape(db, sub)
             log.debug("{items} found for {id}",
                       items=len(items), id=str(sub['id']))
             for item in items:

@@ -1,12 +1,13 @@
 from typing import Any, Dict, List
-
+from dataset import Database
 import hikari
 from lightbulb import BotApp
 from datetime import datetime
 from api import search
+from loguru import logger as log
 
 
-def scrape(params: Dict[str, str]) -> List:
+def scrape(db: Database, params: Dict[str, str]) -> List:
     """
     Scrape items and filter by new results
 
@@ -31,9 +32,41 @@ def scrape(params: Dict[str, str]) -> List:
     if params['synced'] == False:
         return [items[0]]
 
-    # Filter date
+    table = db['items']
+
+    # Filter date and by existing
     items = [item for item in items if item['photo']
              ['high_resolution']['timestamp'] > params['last_sync']]
+
+    for item in items:
+        if not item['id']:
+            items.remove(item)
+            continue
+
+        saved = table.find_one(id=item['id'])
+        log.debug(saved)
+
+        if saved:
+            # Already known
+            log.debug("Removing result {id}, already known", id=item['id'])
+            items.remove(item)
+        else:
+            log.debug("Inserting item #{id}", id=item['id'])
+            table.insert({
+                'id': item['id'],
+                'title': item['title'],
+                'url': item['url'],
+                'price': item['price'],
+                'brand_title': item['brand_title'],
+                'currency': item['currency'],
+                'username': item['user']['login'],
+                'user_link': item['user']['profile_url'],
+                'created_at': item['photo']['high_resolution']['timestamp'],
+                'image': item['photo']['url'],
+                'favorite': item['favourite_count'],
+                'view_count': item['view_count'],
+                'size_title': item['size_title']
+            })
 
     return items
 
