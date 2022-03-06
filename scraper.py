@@ -35,21 +35,26 @@ def scrape(db: Database, params: Dict[str, str]) -> List:
     table = db['items']
 
     # Filter date and by existing
-    items = [item for item in items if item['photo']
-             ['high_resolution']['timestamp'] > params['last_sync']]
-
+    results = []
     for item in items:
-        if not item['id']:
-            items.remove(item)
+        try:
+            timestamp = item['photo']['high_resolution']['timestamp']
+        except KeyError:
+            log.warning("Empty timestamp found")
+            print(item)
             continue
 
+        if timestamp > params['last_sync'] and 'id' in item:
+            results.append(item)
+
+    for item in results:
         saved = table.find_one(id=item['id'])
         log.debug(saved)
 
         if saved:
             # Already known
             log.debug("Removing result {id}, already known", id=item['id'])
-            items.remove(item)
+            results.remove(item)
         else:
             log.debug("Inserting item #{id}", id=item['id'])
             table.insert({
@@ -68,7 +73,7 @@ def scrape(db: Database, params: Dict[str, str]) -> List:
                 'size_title': item['size_title']
             })
 
-    return items
+    return results
 
 
 def generate_embed(item: Any, sub_id: int) -> hikari.Embed:
