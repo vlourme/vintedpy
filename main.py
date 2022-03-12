@@ -50,7 +50,6 @@ async def ready_listener(_):
 
 
 @bot.command()
-@lightbulb.add_checks(lightbulb.owner_only)
 @lightbulb.option('url', 'URL to vinted search', type=str, required=True)
 @lightbulb.option('channel', 'Channel to receive alerts', type=hikari.TextableChannel, required=True)
 @lightbulb.command('subscribe', 'Subscribe to a Vinted search')
@@ -67,7 +66,6 @@ async def subscribe(ctx: lightbulb.Context) -> None:
 
 
 @bot.command()
-@lightbulb.add_checks(lightbulb.owner_only)
 @lightbulb.command('subscriptions', 'Get a list of subscription')
 @lightbulb.implements(lightbulb.SlashCommand)
 async def subscriptions(ctx: lightbulb.Context) -> None:
@@ -83,7 +81,6 @@ async def subscriptions(ctx: lightbulb.Context) -> None:
 
 
 @bot.command()
-@lightbulb.add_checks(lightbulb.owner_only)
 @lightbulb.option('id', 'ID of the subscription', type=int, required=True)
 @lightbulb.command('unsubscribe', 'Stop following a subscription')
 @lightbulb.implements(lightbulb.SlashCommand)
