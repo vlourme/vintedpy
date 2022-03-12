@@ -3,10 +3,13 @@ from dataset import Database
 import hikari
 from lightbulb import BotApp
 from datetime import datetime
+
+from tenacity import retry
 from api import search
 from loguru import logger as log
 
 
+@retry
 def scrape(db: Database, params: Dict[str, str]) -> List:
     """
     Scrape items and filter by new results
