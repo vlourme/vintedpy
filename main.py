@@ -43,6 +43,7 @@ async def run_background() -> None:
 @bot.listen(hikari.ShardReadyEvent)
 async def ready_listener(_):
     log.info("Bot is ready")
+    log.info("{count} subscriptions registered", count=table.count())
     asyncio.create_task(run_background())
 
 
@@ -55,7 +56,7 @@ async def subscribe(ctx: lightbulb.Context) -> None:
     table.insert({
         'url': ctx.options.url,
         'channel_id': ctx.options.channel.id,
-        'last_sync': int(time())
+        'last_sync': -1
     })
     log.info("Subscription created for {url}", url=ctx.options.url)
     await ctx.respond('✅ Created subscription')

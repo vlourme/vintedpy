@@ -32,7 +32,7 @@ def scrape(db: Database, params: Dict[str, str]) -> List:
         return []
 
     # Ignore items for first sync
-    if params['synced'] == False:
+    if params['last_check'] == -1:
         return [items[0]]
 
     table = db['items']
