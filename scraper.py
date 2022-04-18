@@ -60,21 +60,7 @@ def scrape(db: Database, params: Dict[str, str]) -> List:
             results.remove(item)
         else:
             log.debug("Inserting item #{id}", id=item['id'])
-            table.insert({
-                'id': item['id'],
-                'title': item['title'],
-                'url': item['url'],
-                'price': item['price'],
-                'brand_title': item['brand_title'],
-                'currency': item['currency'],
-                'username': item['user']['login'],
-                'user_link': item['user']['profile_url'],
-                'created_at': item['photo']['high_resolution']['timestamp'],
-                'image': item['photo']['url'],
-                'favorite': item['favourite_count'],
-                'view_count': item['view_count'],
-                'size_title': item['size_title']
-            })
+            table.insert({'id': item['id']})
 
     return results
 

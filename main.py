@@ -32,13 +32,10 @@ async def run_background() -> None:
 
             if len(items) > 0:
                 # Update table by using last in date item timestamp
-                table.update(
-                    dict(id=sub['id'],
-                         synced=True,
-                         last_sync=int(items[0]['photo']
-                                       ['high_resolution']['timestamp'])
-                         ),
-                    ['id'])
+                table.update({
+                    'id': sub['id'],
+                    'last_sync': int(items[0]['photo']['high_resolution']['timestamp'])
+                }, ['id'])
 
         await asyncio.sleep(30)
 
@@ -58,7 +55,6 @@ async def subscribe(ctx: lightbulb.Context) -> None:
     table.insert({
         'url': ctx.options.url,
         'channel_id': ctx.options.channel.id,
-        'synced': False,
         'last_sync': int(time())
     })
     log.info("Subscription created for {url}", url=ctx.options.url)
