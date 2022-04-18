@@ -97,5 +97,4 @@ if __name__ == "__main__":
 
 bot.run(activity=hikari.Activity(
     name='Vinted articles!',
-    type=hikari.ActivityType.WATCHING,
-    url='https://github.com/vlourme/vintedpy'))
+    type=hikari.ActivityType.WATCHING))
