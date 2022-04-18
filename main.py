@@ -12,7 +12,7 @@ from scraper import generate_embed, generate_row, scrape
 dotenv.load_dotenv()
 
 bot = lightbulb.BotApp(token=os.getenv('TOKEN'))
-db = dataset.connect('sqlite:///data/data.db')
+db = dataset.connect('sqlite:///data.db')
 table = db['subscriptions']
 
 
