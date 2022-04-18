@@ -9,7 +9,7 @@ from api import search
 from loguru import logger as log
 
 
-@retry
+# @retry
 def scrape(db: Database, params: Dict[str, str]) -> List:
     """
     Scrape items and filter by new results
@@ -32,7 +32,7 @@ def scrape(db: Database, params: Dict[str, str]) -> List:
         return []
 
     # Ignore items for first sync
-    if params['last_check'] == -1:
+    if params['last_sync'] == -1:
         return [items[0]]
 
     table = db['items']

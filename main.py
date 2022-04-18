@@ -20,6 +20,7 @@ async def run_background() -> None:
     log.info("Scraper started.")
 
     while True:
+        log.info('Executing scraping loop')
         for sub in db['subscriptions']:
             items = scrape(db, sub)
             log.debug("{items} found for {id}",
@@ -92,6 +93,9 @@ if __name__ == "__main__":
 
         uvloop.install()
 
-bot.run(activity=hikari.Activity(
-    name='Vinted articles!',
-    type=hikari.ActivityType.WATCHING))
+    try:
+        bot.run(activity=hikari.Activity(
+            name='Vinted articles!',
+            type=hikari.ActivityType.WATCHING))
+    except KeyboardInterrupt:
+        bot.close()
