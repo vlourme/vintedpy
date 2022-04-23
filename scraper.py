@@ -25,7 +25,11 @@ def scrape(db: Database, params: Dict[str, str]) -> List:
     })
 
     # Remove promoted items
-    items = [item for item in response['items'] if item['promoted'] == False]
+    try:
+        items = [item for item in response['items']
+                 if item['promoted'] == False]
+    except KeyError:
+        return []
 
     # Skip null
     if not len(items):
