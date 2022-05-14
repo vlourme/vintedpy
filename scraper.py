@@ -9,7 +9,7 @@ from api import search
 from loguru import logger as log
 
 
-# @retry
+@retry
 def scrape(db: Database, params: Dict[str, str]) -> List:
     """
     Scrape items and filter by new results
