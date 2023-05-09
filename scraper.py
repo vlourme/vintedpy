@@ -4,12 +4,10 @@ import hikari
 from lightbulb import BotApp
 from datetime import datetime
 
-from tenacity import retry
 from api import search
 from loguru import logger as log
 
 
-@retry
 def scrape(db: Database, params: Dict[str, str]) -> List:
     """
     Scrape items and filter by new results
@@ -111,32 +109,32 @@ def generate_row(bot: BotApp, item: Any, link: str) -> Any:
     Returns:
         Any: Generated row
     """
-    row = bot.rest.build_action_row()
+    row = bot.rest.build_message_action_row()
 
     if item['url']:
         (
-            row.add_button(hikari.ButtonStyle.LINK, item['url'])
-            .set_label('View article')
-            .set_emoji('🛍')
-            .add_to_container()
+            row.add_link_button(
+                item['url'],
+                label='View article',
+                emoji='🛍'
+            )
         )
 
     (
-        row.add_button(hikari.ButtonStyle.LINK, link)
-        .set_label('Search list')
-        .set_emoji('🔍')
-        .add_to_container()
+        row.add_link_button(
+            link,
+            label='Search list',
+            emoji='🔍'
+        )
     )
 
     (
-        row.add_button(
-            hikari.ButtonStyle.LINK,
+        row.add_link_button(
             'https://www.vinted.fr/transaction/buy/new?source_screen=item&transaction%5Bitem_id%5D=' +
-            str(item['id'])
+            str(item['id']),
+            label='Buy',
+            emoji='💵'
         )
-        .set_label('Buy')
-        .set_emoji('💵')
-        .add_to_container()
     )
 
     return row

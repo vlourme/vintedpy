@@ -1,40 +1,47 @@
 from urllib.parse import parse_qs, urlencode, urlsplit
 from typing import Any, Dict
 import requests
-from tenacity import retry
+from datetime import datetime
 
 missing_ids = ['catalog', 'status']
 user_agent = 'vinted-ios Vinted/22.6.1 (lt.manodrabuziai.fr; build:21794; iOS 15.2.0) iPhone10,6'
 device_model = 'iPhone10,6'
 app_version = '22.6.1'
 
+session = {}
 
-@retry
-def get_cookie() -> str:
-    """
-    Get a session cookie
 
-    Raises:
-        Exception: Exception if cookie does not exists
+def get_oauth_token() -> Dict[str, str]:
+    global session
 
-    Returns:
-        str: cookie
-    """
-    response = requests.get(
-        url='https://vinted.fr',
+    payload = {
+        "grant_type": "password",
+        "client_id": "ios",
+        "scope": "public"
+    }
+
+    if (session and 'refresh_token' in session):
+        payload['grant_type'] = 'refresh_token'
+        payload['refresh_token'] = session['refresh_token']
+    
+    response = requests.post(
+        url='https://www.vinted.fr/oauth/token',
         headers={
             'User-Agent': user_agent,
-            'x-app-version': app_version,
-            'x-device-model': device_model,
-            'short-bundle-version': app_version
-        }
+        },
+        json=payload,
     )
-    cookie = response.cookies.get('_vinted_fr_session')
 
-    if not cookie:
-        raise Exception('cannot get session cookie')
+    if response.status_code != 200:
+        raise Exception('Failed to get oauth token')
 
-    return cookie
+    content = response.json()
+
+    return {
+        'access_token': content['access_token'],
+        'refresh_token': content['refresh_token'],
+        'expiration_date': content['created_at'] + content['expires_in']
+    }
 
 
 def parse_url(url: str) -> Dict[str, str]:
@@ -69,8 +76,7 @@ def parse_url(url: str) -> Dict[str, str]:
     return results
 
 
-@retry
-def search(url: str, query: Dict[str, str] = {}) -> Any:
+def search(url: str, query: Dict[str, str] = {}) -> Dict[str, Any]:
     """
     Search items from the Vinted API
     using a web URL.
@@ -84,13 +90,17 @@ def search(url: str, query: Dict[str, str] = {}) -> Any:
         Any: JSON results
     """
 
-    session = get_cookie()
+    global session
+
+    if (not session or session['expiration_date'] < datetime.now().timestamp()):
+        session = get_oauth_token()
+
     query = dict(parse_url(url), **query)
 
     response = requests.get(
         url='https://www.vinted.fr/api/v2/catalog/items?' + urlencode(query),
         headers={
-            'Cookie': '_vinted_fr_session=' + session,
+            'Authorization': f'Bearer {session["access_token"]}',
             'User-Agent': user_agent,
             'x-app-version': app_version,
             'x-device-model': device_model,
@@ -98,5 +108,8 @@ def search(url: str, query: Dict[str, str] = {}) -> Any:
             'Accept': 'application/json'
         }
     )
+    
+    if response.status_code != 200:
+        raise Exception('Failed to search')
 
     return response.json()

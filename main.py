@@ -1,6 +1,5 @@
 import asyncio
 import os
-from time import time
 import dataset
 import dotenv
 import hikari
@@ -22,6 +21,7 @@ async def run_background() -> None:
     while True:
         log.info('Executing scraping loop')
         for sub in db['subscriptions']:
+            print(sub)
             items = scrape(db, sub)
             log.debug("{items} found for {id}",
                       items=len(items), id=str(sub['id']))
@@ -38,7 +38,8 @@ async def run_background() -> None:
                     'last_sync': int(items[0]['photo']['high_resolution']['timestamp'])
                 }, ['id'])
 
-        await asyncio.sleep(30)
+        log.info('Sleeping for {interval} seconds', interval=os.getenv('INTERVAL', 60))
+        await asyncio.sleep(int(os.getenv('INTERVAL', 60)))
 
 
 @bot.listen(hikari.ShardReadyEvent)

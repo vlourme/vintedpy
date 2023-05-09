@@ -2,6 +2,17 @@
 
 I decided to open-source by Vinted alerting bot. This bot will inform you via Discord message when new articles that correspond to your criteria are posted on Vinted.
 
+## Changelog
+
+### 09/05/2023 — Bug fixes / Important notice
+
+I haven't updated this bot for like a year. This bot is now back working with following changes:
+
+- Fixed major bug due to Lightbulb change in the way of making embedded messages
+- Tokens are now fetched via iOS client instead of web session
+- Added an interval parameter in the environments
+- Removed tenacity and retrying decorators, this may create an infinite loop.
+
 ## How it works?
 
 Once installed, your Discord server will have 3 new commands registered:
