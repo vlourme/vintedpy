@@ -6,7 +6,7 @@ import hikari
 import lightbulb
 from loguru import logger as log
 
-from scraper import generate_embed, generate_row, scrape
+from scraper import generate_embed, scrape
 
 dotenv.load_dotenv()
 
@@ -27,9 +27,8 @@ async def run_background() -> None:
                       items=len(items), id=str(sub['id']))
             for item in items:
                 embed = generate_embed(item, sub['id'])
-                row = generate_row(bot, item, sub['url'])
 
-                await bot.rest.create_message(sub['channel_id'], embed=embed, components=[row])
+                await bot.rest.create_message(sub['channel_id'], embed=embed)
 
             if len(items) > 0:
                 # Update table by using last in date item timestamp
