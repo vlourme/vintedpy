@@ -1,3 +1,5 @@
+> **Important notice:** Stop sending me emails to fix the project. This project is now archived.
+
 # Vinted Alerting Bot
 
 I decided to open-source by Vinted alerting bot. This bot will inform you via Discord message when new articles that correspond to your criteria are posted on Vinted.
