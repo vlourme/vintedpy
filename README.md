@@ -1,4 +1,12 @@
-> **Important notice:** Stop sending me emails to fix the project. This project is now archived.
+<a href="https://discord.gg/a3TVmq7XXv">
+  <img height="600" width="1000" src="https://i.ibb.co/xt4Dbkpq/VintedRT.png">
+</a>
+
+# No more self-host needed! Join our [Discord server](https://discord.gg/a3TVmq7XXv)
+
+> Current state of the project:
+> Open-source project is actually stopped, if someone wants to maintain it, I can give maintainer permissions.
+> The hosted project is still maintained.
 
 # Vinted Alerting Bot
 
