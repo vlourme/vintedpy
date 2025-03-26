@@ -1,5 +1,5 @@
 <a href="https://discord.gg/a3TVmq7XXv">
-  <img height="600" src="https://i.ibb.co/xt4Dbkpq/VintedRT.png">
+  <img src="https://i.ibb.co/xt4Dbkpq/VintedRT.png">
 </a>
 
 # No more self-host needed! Join our [Discord server](https://discord.gg/a3TVmq7XXv)
